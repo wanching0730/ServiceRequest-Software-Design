@@ -51,7 +51,7 @@ public class AppUI implements IUserInterface {
     }
 
     private void displayAllRequest() {
-        List<ServiceRequest> requests = controller.displayAllRequest();
+        List<ServiceRequest> requests = controller.displayAllRequests();
 
         if(requests.size() == 0) {
             System.out.println("The service request list is currently empty.");
@@ -97,13 +97,15 @@ public class AppUI implements IUserInterface {
     private void updateRequest() {
 
         int choice;
-        char repeat;
+        String repeat;
+        String requestId;
 
         do {
             System.out.println("Enter request ID that you wish to update it: ");
-            String skip2 = scanner.nextLine();
-            String requestId = scanner.nextLine();
-            System.out.println(requestId);
+
+           do{
+               requestId = scanner.nextLine();
+           } while(requestId.isEmpty());
 
             ServiceRequest request = controller.getSelectedRequest(requestId);
             System.out.println("Details of selected service request: ");
@@ -138,10 +140,12 @@ public class AppUI implements IUserInterface {
             }
 
             System.out.println("Do you want to continue updating service request? (Y/N): ");
-            String skip = scanner.nextLine();
-            repeat = scanner.nextLine().charAt(0);
+            do{
+                repeat = scanner.nextLine();
+            } while (repeat.isEmpty());
 
-        } while(repeat == 'Y' || repeat == 'y');
+
+        } while(repeat.charAt(0) == 'Y' || repeat.charAt(0) == 'y');
     }
 
     private void assignTechnician() {

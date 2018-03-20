@@ -7,6 +7,7 @@ public class AppController {
     private IServiceList serviceList;
 
     public AppController() {
+
         serviceList = new RequestArrayList();
     }
 
@@ -14,7 +15,7 @@ public class AppController {
         return serviceList.searchRequest(requestId);
     }
 
-    public List<ServiceRequest> displayAllRequest() {
+    public List<ServiceRequest> displayAllRequests() {
         return serviceList.displayAllRequests();
     }
 
