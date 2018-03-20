@@ -1,5 +1,7 @@
 package service.domain;
 
+import java.util.List;
+
 public class AppController {
 
     private IServiceList serviceList;
@@ -8,15 +10,23 @@ public class AppController {
         serviceList = new RequestArrayList();
     }
 
+    public ServiceRequest getSelectedRequest(String requestId) {
+        return serviceList.searchRequest(requestId);
+    }
+
+    public List<ServiceRequest> displayAllRequest() {
+        return serviceList.displayAllRequests();
+    }
+
     public void createRequest(String id, Client client) {
         serviceList.createRequest(id, client);
     }
 
-    public void assignTechnician(String requestId, String technicianId, String serviceDate) {
-        serviceList.assignTechnician(requestId, technicianId, serviceDate);
+    public void assignTechnician(Technician selectedTechnician, String serviceDate) {
+        serviceList.assignTechnician(selectedTechnician, serviceDate);
     }
 
-    public void updateServiceCharge(String requestId, double serviceCharge) {
-        serviceList.updateServiceCharge(requestId, serviceCharge);
+    public void updateServiceCharge(double serviceCharge) {
+        serviceList.updateServiceCharge(serviceCharge);
     }
 }

@@ -1,10 +1,16 @@
 package service.domain;
 
+import java.util.List;
+
 public interface IServiceList {
 
-    public void createRequest(String id, Client client);
+    public ServiceRequest searchRequest(String id);
 
-    public void assignTechnician(String requestId, String technicianId, String serviceDate);
+    public List<ServiceRequest> displayAllRequests();
 
-    public void updateServiceCharge(String requestId, double serviceCharge);
+    public void createRequest(String requestId, Client selectedClient);
+
+    public void assignTechnician(Technician selectedTechnician, String serviceDate);
+
+    public void updateServiceCharge(double serviceCharge);
 }

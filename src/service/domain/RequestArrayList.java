@@ -6,12 +6,14 @@ import java.util.List;
 public class RequestArrayList implements IServiceList {
 
     private List<ServiceRequest> requests;
+    private ServiceRequest selectedRequest = null;
 
     public RequestArrayList() {
         requests = new ArrayList<>();
     }
 
-    private ServiceRequest searchRequest(String requestId) {
+    @Override
+    public ServiceRequest searchRequest(String requestId) {
         ServiceRequest request = null;
         boolean found = false;
         int i = 0;
@@ -24,46 +26,34 @@ public class RequestArrayList implements IServiceList {
                 i++;
         }
 
-        if(found)
+        if(found) {
+            selectedRequest = request;
             return request;
+        }
+
         else
             return null;
     }
 
     @Override
-    public void createRequest(String id, Client client) {
-        ServiceRequest request = new ServiceRequest(id, client);
+    public List<ServiceRequest> displayAllRequests() {
+        return requests;
+    }
+
+    @Override
+    public void createRequest(String requestId, Client selectedClient) {
+        ServiceRequest request = new ServiceRequest(requestId, selectedClient);
         requests.add(request);
     }
 
     @Override
-    public void assignTechnician(String requestId, String technicianId, String serviceDate) {
-        Technician technician = null;
-        List<Technician> technicians = ExistingData.retrieveTechnician();
-        ServiceRequest selectedRequest = this.searchRequest(requestId);
-        boolean found = false;
-        int i = 0;
-
-//        while(i < technicians.size() && !found) {
-//            technician = technicians.get(i);
-//            if(technician.getId().equals(technicianId)) {
-//                found = true;
-//            } else {
-//                i++;
-//            }
-//        }
-
-        if(found) {
-            selectedRequest.setTechnician(technician);
-            selectedRequest.setServiceDate(serviceDate);
-        } else {
-            System.out.println("Technician not found!");
-        }
+    public void assignTechnician(Technician selectedTechnician, String serviceDate) {
+        selectedRequest.setTechnician(selectedTechnician);
+        selectedRequest.setServiceDate(serviceDate);
     }
 
     @Override
-    public void updateServiceCharge(String requestId, double serviceCharge) {
-        ServiceRequest selectedRequest = this.searchRequest(requestId);
+    public void updateServiceCharge(double serviceCharge) {
         selectedRequest.setServiceCharge(serviceCharge);
     }
 
