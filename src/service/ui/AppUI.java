@@ -70,11 +70,21 @@ public class AppUI implements IUserInterface {
     }
 
     private void createRequest() {
-        System.out.println("Enter client ID: ");
-        String skip1 = scanner.nextLine();
-        String clientId = scanner.nextLine();
 
-        Client selectedClient = searchClient(clientId);
+        Client selectedClient;
+        String clientId;
+
+        do {
+            System.out.println("Enter client ID (Eg: 1001, 1002, 1003...):  ");
+
+            do {
+                clientId = scanner.nextLine();
+            } while(clientId.isEmpty());
+
+            selectedClient = searchClient(clientId);
+
+        } while (selectedClient == null);
+
         System.out.println("Details of selected client: ");
         System.out.println("Name: " + selectedClient.getName());
         System.out.println("Address: " + selectedClient.getAddress());
@@ -84,7 +94,7 @@ public class AppUI implements IUserInterface {
         char confirmation = scanner.next().charAt(0);
 
         if(confirmation == 'Y' || confirmation == 'y') {
-            System.out.println("Enter request ID: ");
+            System.out.println("Enter request ID (Eg: 3001, 3002, 3003...):  ");
             String skip2 = scanner.nextLine();
             String requestId = scanner.nextLine();
             controller.createRequest(requestId, selectedClient);
@@ -99,25 +109,34 @@ public class AppUI implements IUserInterface {
         int choice;
         String repeat;
         String requestId;
+        ServiceRequest request;
 
         do {
-            System.out.println("Enter request ID that you wish to update it: ");
+            do{
+                System.out.println("Enter ID for the service request that you wish to update it: ");
 
-           do{
-               requestId = scanner.nextLine();
-           } while(requestId.isEmpty());
+                do{
+                    requestId = scanner.nextLine();
+                } while(requestId.isEmpty());
 
-            ServiceRequest request = controller.getSelectedRequest(requestId);
-            System.out.println("Details of selected service request: ");
-            System.out.println("ID: " + request.getId());
-            System.out.println("Service charge: " + request.getServiceCharge());
-            System.out.println("Client Name: " + request.getClient().getName());
-            if(request.getTechnician() != null) {
-                System.out.println("Technician Name: " + request.getTechnician().getName());
-                System.out.println("Service Date: " + request.getServiceDate());
-            }
+                request = controller.getSelectedRequest(requestId);
 
-            System.out.println();
+                if(request != null) {
+                    System.out.println("Details of selected service request: ");
+                    System.out.println("ID: " + request.getId());
+                    System.out.println("Service charge: " + request.getServiceCharge());
+                    System.out.println("Client Name: " + request.getClient().getName());
+                    if(request.getTechnician() != null) {
+                        System.out.println("Technician Name: " + request.getTechnician().getName());
+                        System.out.println("Service Date: " + request.getServiceDate());
+                    }
+                    System.out.println();
+
+                } else {
+                    System.out.println("Request ID is not found!");
+                    System.out.println("Please try again.");
+                }
+            } while(request == null);
 
             System.out.println("Do you want to:");
             System.out.println("1 - Assign technician");
@@ -149,7 +168,7 @@ public class AppUI implements IUserInterface {
     }
 
     private void assignTechnician() {
-        System.out.println("Enter technician ID: ");
+        System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
         String skip1 = scanner.nextLine();
         String technicianId = scanner.nextLine();
 
@@ -200,7 +219,8 @@ public class AppUI implements IUserInterface {
         if(found) {
             return client;
         } else {
-            System.out.println("Client not found!");
+            System.out.println("Client ID is not found!");
+            System.out.println("Please try again.");
             return null;
         }
     }
@@ -224,6 +244,7 @@ public class AppUI implements IUserInterface {
             return technician;
         } else {
             System.out.println("Technician not found!");
+            System.out.println("Please try again.");
             return null;
         }
     }
