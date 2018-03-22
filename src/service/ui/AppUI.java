@@ -113,7 +113,7 @@ public class AppUI implements IUserInterface {
 
         do {
             do{
-                System.out.println("Enter ID for the service request that you wish to update it: ");
+                System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
 
                 do{
                     requestId = scanner.nextLine();
