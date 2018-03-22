@@ -11,7 +11,7 @@ public class AppController {
         serviceList = new RequestArrayList();
     }
 
-    public ServiceRequest getSelectedRequest(String requestId) {
+    public ServiceRequest searchRequest(String requestId) {
         return serviceList.searchRequest(requestId);
     }
 

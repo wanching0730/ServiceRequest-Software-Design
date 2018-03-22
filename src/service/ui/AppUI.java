@@ -119,7 +119,7 @@ public class AppUI implements IUserInterface {
                     requestId = scanner.nextLine();
                 } while(requestId.isEmpty());
 
-                request = controller.getSelectedRequest(requestId);
+                request = controller.searchRequest(requestId);
 
                 if(request != null) {
                     System.out.println("Details of selected service request: ");
