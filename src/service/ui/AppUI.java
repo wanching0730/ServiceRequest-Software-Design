@@ -108,10 +108,8 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    private void assignTechnician() {
-
+    private void findRequest() {
         String requestId;
-        String technicianId;
         ServiceRequest selectedRequest;
 
         do{
@@ -123,13 +121,28 @@ public class AppUI implements IUserInterface {
 
             selectedRequest = controller.searchRequest(requestId);
 
-            if(selectedRequest == null) {
+            if(selectedRequest != null) {
+                System.out.println("Request ID: " + selectedRequest.getId());
+                System.out.println("Client Name: " + selectedRequest.getClient().getName());
+                if(selectedRequest.getTechnician() != null) {
+                    System.out.println("Technician Name: " + selectedRequest.getTechnician().getName());
+                    System.out.println("Service Date: " + selectedRequest.getServiceDate());
+                }
+                if(selectedRequest.getServiceCharge() != 0.0)
+                    System.out.println("Service Charge: " + selectedRequest.getServiceCharge());
+            } else {
                 System.out.println("Request ID is not found!");
                 System.out.println("Please try again.");
-
             }
 
         } while(selectedRequest == null);
+    }
+
+    private void assignTechnician() {
+
+        String technicianId;
+
+        findRequest();
 
         System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
 
@@ -162,25 +175,7 @@ public class AppUI implements IUserInterface {
 
     private void updateServiceCharge() {
 
-        String requestId;
-        ServiceRequest selectedRequest;
-
-        do{
-            System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
-
-            do{
-                requestId = scanner.nextLine();
-            } while(requestId.isEmpty());
-
-            selectedRequest = controller.searchRequest(requestId);
-
-            if(selectedRequest == null) {
-                System.out.println("Request ID is not found!");
-                System.out.println("Please try again.");
-
-            }
-
-        } while(selectedRequest == null);
+        findRequest();
 
         System.out.println("Enter service charge in (RM): ");
         double serviceCharge = scanner.nextDouble();
