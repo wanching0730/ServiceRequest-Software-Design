@@ -27,15 +27,16 @@ public class AppUI implements IUserInterface {
             System.out.println("Do you want to:");
             System.out.println("1 - Display all service requests");
             System.out.println("2 - Create new service request");
-            System.out.println("3 - Update service request");
-            System.out.println("4 - Exit");
+            System.out.println("3 - Assign technician");
+            System.out.println("4 - Update service charge");
+            System.out.println("5 - Exit");
 
-            System.out.println("Please selection an option from the menu above (1-4): ");
+            System.out.println("Please selection an option from the menu above (1-5): ");
             choice = scanner.nextInt();
 
-            while(choice < 1 || choice > 4){
+            while(choice < 1 || choice > 5){
                 System.out.println("Invalid choice");
-                System.out.println("Please enter your option again (1-4): ");
+                System.out.println("Please enter your option again (1-5): ");
                 choice = scanner.nextInt();
             }
 
@@ -44,12 +45,15 @@ public class AppUI implements IUserInterface {
                 break;
                 case 2: createRequest();
                 break;
-                case 3: updateRequest();
+                case 3: assignTechnician();
+                break;
+                case 4: updateServiceCharge();
                 break;
             }
-        } while(choice != 4);
+        } while(choice != 5);
     }
 
+    // Just for checking purpose, it is not included in the diagrams
     private void displayAllRequest() {
         List<ServiceRequest> requests = controller.displayAllRequests();
 
@@ -104,73 +108,35 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    private void updateRequest() {
-
-        int choice;
-        String repeat;
-        String requestId;
-        ServiceRequest request;
-
-        do {
-            do{
-                System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
-
-                do{
-                    requestId = scanner.nextLine();
-                } while(requestId.isEmpty());
-
-                request = controller.searchRequest(requestId);
-
-                if(request != null) {
-                    System.out.println("Details of selected service request: ");
-                    System.out.println("ID: " + request.getId());
-                    System.out.println("Service charge: " + request.getServiceCharge());
-                    System.out.println("Client Name: " + request.getClient().getName());
-                    if(request.getTechnician() != null) {
-                        System.out.println("Technician Name: " + request.getTechnician().getName());
-                        System.out.println("Service Date: " + request.getServiceDate());
-                    }
-                    System.out.println();
-
-                } else {
-                    System.out.println("Request ID is not found!");
-                    System.out.println("Please try again.");
-                }
-            } while(request == null);
-
-            System.out.println("Do you want to:");
-            System.out.println("1 - Assign technician");
-            System.out.println("2 - Update service charge");
-
-            System.out.println("Please selection an option from the menu above (1-3): ");
-            choice = scanner.nextInt();
-
-            while(choice < 1 || choice > 3) {
-                System.out.println("Invalid choice");
-                System.out.println("Please enter your option again (1-3): ");
-                choice = scanner.nextInt();
-            }
-
-            switch (choice) {
-                case 1: assignTechnician();
-                break;
-                case 2: updateServiceCharge();
-                break;
-            }
-
-            System.out.println("Do you want to continue updating service request? (Y/N): ");
-            do{
-                repeat = scanner.nextLine();
-            } while (repeat.isEmpty());
-
-
-        } while(repeat.charAt(0) == 'Y' || repeat.charAt(0) == 'y');
-    }
-
     private void assignTechnician() {
+
+        String requestId;
+        String technicianId;
+        ServiceRequest selectedRequest;
+
+        do{
+            System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
+
+            do{
+                requestId = scanner.nextLine();
+            } while(requestId.isEmpty());
+
+            selectedRequest = controller.searchRequest(requestId);
+
+            if(selectedRequest == null) {
+                System.out.println("Request ID is not found!");
+                System.out.println("Please try again.");
+
+            }
+
+        } while(selectedRequest == null);
+
         System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
-        String skip1 = scanner.nextLine();
-        String technicianId = scanner.nextLine();
+
+        do{
+            technicianId = scanner.nextLine();
+        } while(technicianId.isEmpty());
+
 
         Technician selectedTechnician = searchTechnician(technicianId);
 
@@ -195,6 +161,27 @@ public class AppUI implements IUserInterface {
     }
 
     private void updateServiceCharge() {
+
+        String requestId;
+        ServiceRequest selectedRequest;
+
+        do{
+            System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
+
+            do{
+                requestId = scanner.nextLine();
+            } while(requestId.isEmpty());
+
+            selectedRequest = controller.searchRequest(requestId);
+
+            if(selectedRequest == null) {
+                System.out.println("Request ID is not found!");
+                System.out.println("Please try again.");
+
+            }
+
+        } while(selectedRequest == null);
+
         System.out.println("Enter service charge in (RM): ");
         double serviceCharge = scanner.nextDouble();
         controller.updateServiceCharge(serviceCharge);
