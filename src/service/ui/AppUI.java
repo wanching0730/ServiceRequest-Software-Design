@@ -75,25 +75,14 @@ public class AppUI implements IUserInterface {
 
     private void createRequest() {
 
-        Client selectedClient;
-        String clientId;
+        Client selectedClient = null;
 
         do {
-            System.out.println("Enter client ID (Eg: 1001, 1002, 1003...):  ");
+            selectedClient = searchClient();
+        } while(selectedClient == null);
 
-            do {
-                clientId = scanner.nextLine();
-            } while(clientId.isEmpty());
+        displayClient(selectedClient);
 
-            selectedClient = searchClient(clientId);
-
-        } while (selectedClient == null);
-
-        System.out.println("Details of selected client: ");
-        System.out.println("Name: " + selectedClient.getName());
-        System.out.println("Address: " + selectedClient.getAddress());
-        System.out.println("Contact: " + selectedClient.getContact());
-        System.out.println();
         System.out.println("Are you sure you want to create new service request with this client? (Y/N): ");
         char confirmation = scanner.next().charAt(0);
 
@@ -108,7 +97,7 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    private void findRequest() {
+    private void searchRequest() {
         String requestId;
         ServiceRequest selectedRequest;
 
@@ -142,14 +131,13 @@ public class AppUI implements IUserInterface {
 
         String technicianId;
 
-        findRequest();
+        searchRequest();
 
         System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
 
         do{
             technicianId = scanner.nextLine();
         } while(technicianId.isEmpty());
-
 
         Technician selectedTechnician = searchTechnician(technicianId);
 
@@ -175,7 +163,7 @@ public class AppUI implements IUserInterface {
 
     private void updateServiceCharge() {
 
-        findRequest();
+        searchRequest();
 
         System.out.println("Enter service charge in (RM): ");
         double serviceCharge = scanner.nextDouble();
@@ -183,15 +171,24 @@ public class AppUI implements IUserInterface {
         System.out.println("Service charge updated successfully!");
     }
 
-    private Client searchClient(String id) {
-        Client client = null;
-        List<Client> clients = ExistingData.retrieveClients();
+    private Client searchClient() {
+
         boolean found = false;
         int i = 0;
+        Client selectedClient = null;
+        String clientId;
+        List<Client> clients = ExistingData.retrieveClients();
+
+
+        System.out.println("Enter client ID (Eg: 1001, 1002, 1003...):  ");
+
+        do {
+            clientId = scanner.nextLine();
+        } while(clientId.isEmpty());
 
         while(i < clients.size() && !found) {
-            client = clients.get(i);
-            if(client.getId().equals(id)) {
+            selectedClient = clients.get(i);
+            if(selectedClient.getId().equals(clientId)) {
                 found = true;
             } else {
                 i++;
@@ -199,12 +196,13 @@ public class AppUI implements IUserInterface {
         }
 
         if(found) {
-            return client;
+            return selectedClient;
         } else {
             System.out.println("Client ID is not found!");
             System.out.println("Please try again.");
             return null;
         }
+
     }
 
     private Technician searchTechnician(String id) {
@@ -229,5 +227,14 @@ public class AppUI implements IUserInterface {
             System.out.println("Please try again.");
             return null;
         }
+    }
+
+    public void displayClient(Client selectedClient) {
+
+        System.out.println("Details of selected client: ");
+        System.out.println("Name: " + selectedClient.getName());
+        System.out.println("Address: " + selectedClient.getAddress());
+        System.out.println("Contact: " + selectedClient.getContact());
+        System.out.println();
     }
 }
