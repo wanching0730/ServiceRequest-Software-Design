@@ -97,36 +97,6 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    private void searchRequest() {
-        String requestId;
-        ServiceRequest selectedRequest;
-
-        do{
-            System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
-
-            do{
-                requestId = scanner.nextLine();
-            } while(requestId.isEmpty());
-
-            selectedRequest = controller.searchRequest(requestId);
-
-            if(selectedRequest != null) {
-                System.out.println("Request ID: " + selectedRequest.getId());
-                System.out.println("Client Name: " + selectedRequest.getClient().getName());
-                if(selectedRequest.getTechnician() != null) {
-                    System.out.println("Technician Name: " + selectedRequest.getTechnician().getName());
-                    System.out.println("Service Date: " + selectedRequest.getServiceDate());
-                }
-                if(selectedRequest.getServiceCharge() != 0.0)
-                    System.out.println("Service Charge: " + selectedRequest.getServiceCharge());
-            } else {
-                System.out.println("Request ID is not found!");
-                System.out.println("Please try again.");
-            }
-
-        } while(selectedRequest == null);
-    }
-
     private void assignTechnician() {
 
         Technician selectedTechnician = null;
@@ -163,6 +133,23 @@ public class AppUI implements IUserInterface {
         System.out.println("Service charge updated successfully!");
     }
 
+    private void searchRequest() {
+        String requestId;
+        ServiceRequest selectedRequest;
+
+        do{
+            System.out.println("Enter ID for the service request that you wish to update it (Eg: 3001, 3002, 3003...): ");
+
+            do{
+                requestId = scanner.nextLine();
+            } while(requestId.isEmpty());
+
+            selectedRequest = controller.searchRequest(requestId);
+            displayRequest(selectedRequest);
+
+        } while(selectedRequest == null);
+    }
+
     private Client searchClient() {
 
         boolean found = false;
@@ -195,7 +182,7 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    private Technician searchTechnician(String id) {
+    private Technician searchTechnician() {
 
         boolean found = false;
         int i = 0;
@@ -211,7 +198,7 @@ public class AppUI implements IUserInterface {
 
         while(!found && i < technicians.size()) {
             selectedTechnician = technicians.get(i);
-            if(selectedTechnician.getId().equals(id)) {
+            if(selectedTechnician.getId().equals(technicianId)) {
                 found = true;
             } else {
                 i++;
@@ -224,6 +211,23 @@ public class AppUI implements IUserInterface {
             System.out.println("Technician not found!");
             System.out.println("Please try again.");
             return null;
+        }
+    }
+
+    public void displayRequest(ServiceRequest selectedRequest) {
+
+        if(selectedRequest != null) {
+            System.out.println("Request ID: " + selectedRequest.getId());
+            System.out.println("Client Name: " + selectedRequest.getClient().getName());
+            if(selectedRequest.getTechnician() != null) {
+                System.out.println("Technician Name: " + selectedRequest.getTechnician().getName());
+                System.out.println("Service Date: " + selectedRequest.getServiceDate());
+            }
+            if(selectedRequest.getServiceCharge() != 0.0)
+                System.out.println("Service Charge: " + selectedRequest.getServiceCharge());
+        } else {
+            System.out.println("Request ID is not found!");
+            System.out.println("Please try again.");
         }
     }
 
