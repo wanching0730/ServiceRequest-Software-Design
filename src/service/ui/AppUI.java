@@ -129,24 +129,16 @@ public class AppUI implements IUserInterface {
 
     private void assignTechnician() {
 
-        String technicianId;
+        Technician selectedTechnician = null;
 
         searchRequest();
 
-        System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
+        do {
+            selectedTechnician = searchTechnician();
+        } while(selectedTechnician == null);
 
-        do{
-            technicianId = scanner.nextLine();
-        } while(technicianId.isEmpty());
+        displayTechnician(selectedTechnician);
 
-        Technician selectedTechnician = searchTechnician(technicianId);
-
-        System.out.println("Details of selected technician: ");
-        System.out.println("Name: " + selectedTechnician.getName());
-        System.out.println("Sex: " + selectedTechnician.getSex());
-        System.out.println("Address: " + selectedTechnician.getAddress());
-        System.out.println("Contact: " + selectedTechnician.getContact());
-        System.out.println();
         System.out.println("Are you sure you want to assign this technician to this service request? (Y/N): ");
         char confirmation = scanner.next().charAt(0);
 
@@ -179,7 +171,6 @@ public class AppUI implements IUserInterface {
         String clientId;
         List<Client> clients = ExistingData.retrieveClients();
 
-
         System.out.println("Enter client ID (Eg: 1001, 1002, 1003...):  ");
 
         do {
@@ -202,18 +193,25 @@ public class AppUI implements IUserInterface {
             System.out.println("Please try again.");
             return null;
         }
-
     }
 
     private Technician searchTechnician(String id) {
-        Technician technician = null;
-        List<Technician> technicians = ExistingData.retrieveTechnician();
+
         boolean found = false;
         int i = 0;
+        String technicianId;
+        Technician selectedTechnician = null;
+        List<Technician> technicians = ExistingData.retrieveTechnician();
+
+        System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
+
+        do{
+            technicianId = scanner.nextLine();
+        } while(technicianId.isEmpty());
 
         while(!found && i < technicians.size()) {
-            technician = technicians.get(i);
-            if(technician.getId().equals(id)) {
+            selectedTechnician = technicians.get(i);
+            if(selectedTechnician.getId().equals(id)) {
                 found = true;
             } else {
                 i++;
@@ -221,7 +219,7 @@ public class AppUI implements IUserInterface {
         }
 
         if(found) {
-            return technician;
+            return selectedTechnician;
         } else {
             System.out.println("Technician not found!");
             System.out.println("Please try again.");
@@ -235,6 +233,15 @@ public class AppUI implements IUserInterface {
         System.out.println("Name: " + selectedClient.getName());
         System.out.println("Address: " + selectedClient.getAddress());
         System.out.println("Contact: " + selectedClient.getContact());
+        System.out.println();
+    }
+
+    public void displayTechnician(Technician selectedTechnician) {
+        System.out.println("Details of selected technician: ");
+        System.out.println("Name: " + selectedTechnician.getName());
+        System.out.println("Sex: " + selectedTechnician.getSex());
+        System.out.println("Address: " + selectedTechnician.getAddress());
+        System.out.println("Contact: " + selectedTechnician.getContact());
         System.out.println();
     }
 }
