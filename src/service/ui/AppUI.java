@@ -46,12 +46,12 @@ public class AppUI implements IUserInterface {
                 case 1: displayAllRequest();
                 break;
                 case 2: {
-                    retrievePerson(new ClientArrayList(), "List of clients:");
+                    retrieveAllPerson(new ClientArrayList(), "List of clients:");
                     createRequest();
                 }
                 break;
                 case 3: {
-                    retrievePerson(new TechnicianArrayList(), "List of technicians:");
+                    retrieveAllPerson(new TechnicianArrayList(), "List of technicians:");
                     assignTechnician();
                 }
                 break;
@@ -89,7 +89,7 @@ public class AppUI implements IUserInterface {
             selectedClient = searchClient();
         } while(selectedClient == null);
 
-        display(selectedClient, "Details of Client:");
+        displayPerson(selectedClient, "Details of Client:");
 
         System.out.println("Are you sure you want to create new service request with this client? (Y/N): ");
         char confirmation = scanner.next().charAt(0);
@@ -115,7 +115,7 @@ public class AppUI implements IUserInterface {
             selectedTechnician = searchTechnician();
         } while(selectedTechnician == null);
 
-        display(selectedTechnician, "Details of Technician:");
+        displayPerson(selectedTechnician, "Details of Technician:");
 
         System.out.println("Are you sure you want to assign this technician to this service request? (Y/N): ");
         char confirmation = scanner.next().charAt(0);
@@ -216,7 +216,7 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    public void display(Person selectedPerson, String message) {
+    public void displayPerson(Person selectedPerson, String message) {
 
         System.out.println(message);
         System.out.println("Name: " + selectedPerson.getName());
@@ -225,7 +225,7 @@ public class AppUI implements IUserInterface {
         System.out.println();
     }
 
-    public void retrievePerson(PersonArrayList personArrayList, String message) {
+    public void retrieveAllPerson(PersonArrayList personArrayList, String message) {
 
         System.out.println(message);
         for(Person client : personArrayList.retrieve()) {

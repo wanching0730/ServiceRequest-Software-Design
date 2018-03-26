@@ -10,6 +10,8 @@ public abstract class PersonArrayList {
         return persons;
     }
 
+    public abstract void init();
+
     public Person search(String id) {
 
         boolean found = false;
