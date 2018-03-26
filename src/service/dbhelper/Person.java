@@ -1,4 +1,4 @@
-package service.DbHelper;
+package service.dbhelper;
 
 public abstract class Person {
 

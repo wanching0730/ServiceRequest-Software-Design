@@ -1,4 +1,4 @@
-package service.DbHelper;
+package service.dbhelper;
 
 public class Client extends Person {
 

@@ -1,6 +1,6 @@
 package service.ui;
 
-import service.DbHelper.*;
+import service.dbhelper.*;
 import service.domain.*;
 
 import java.util.List;
@@ -98,7 +98,7 @@ public class AppUI implements IUserInterface {
             System.out.println("Enter request ID (Eg: 3001, 3002, 3003...):  ");
             String skip2 = scanner.nextLine();
             String requestId = scanner.nextLine();
-            controller.createRequest(requestId, (Client)selectedClient);
+            controller.createRequest(requestId, (Client) selectedClient);
             System.out.println("Request created successfully!");
         } else {
             System.out.print("Thank you!");

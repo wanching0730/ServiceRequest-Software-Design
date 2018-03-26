@@ -1,7 +1,7 @@
 package service.domain;
 
-import service.DbHelper.Client;
-import service.DbHelper.Technician;
+import service.dbhelper.Client;
+import service.dbhelper.Technician;
 
 import java.util.ArrayList;
 import java.util.List;
