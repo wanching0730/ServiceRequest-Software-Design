@@ -89,7 +89,7 @@ public class AppUI implements IUserInterface {
             selectedClient = searchClient();
         } while(selectedClient == null);
 
-        displayClient(selectedClient);
+        display(selectedClient, "Details of Client:");
 
         System.out.println("Are you sure you want to create new service request with this client? (Y/N): ");
         char confirmation = scanner.next().charAt(0);
@@ -115,7 +115,7 @@ public class AppUI implements IUserInterface {
             selectedTechnician = searchTechnician();
         } while(selectedTechnician == null);
 
-        displayTechnician(selectedTechnician);
+        display(selectedTechnician, "Details of Technician:");
 
         System.out.println("Are you sure you want to assign this technician to this service request? (Y/N): ");
         char confirmation = scanner.next().charAt(0);
@@ -216,20 +216,12 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    public void displayClient(Person selectedClient) {
+    public void display(Person selectedPerson, String message) {
 
-        System.out.println("Details of selected client: ");
-        System.out.println("Name: " + selectedClient.getName());
-        System.out.println("Address: " + selectedClient.getAddress());
-        System.out.println("Contact: " + selectedClient.getContact());
-        System.out.println();
-    }
-
-    public void displayTechnician(Person selectedTechnician) {
-        System.out.println("Details of selected technician: ");
-        System.out.println("Name: " + selectedTechnician.getName());
-        System.out.println("Address: " + selectedTechnician.getAddress());
-        System.out.println("Contact: " + selectedTechnician.getContact());
+        System.out.println(message);
+        System.out.println("Name: " + selectedPerson.getName());
+        System.out.println("Address: " + selectedPerson.getAddress());
+        System.out.println("Contact: " + selectedPerson.getContact());
         System.out.println();
     }
 
