@@ -1,13 +1,13 @@
-package service.domain;
+package service.DbHelper;
 
-public class Client {
+public abstract class Person {
 
     private String id;
     private String name;
     private String address;
     private String contact;
 
-    public Client(String id, String name, String address, String contact) {
+    public Person(String id, String name, String address, String contact) {
         this.id = id;
         this.name = name;
         this.address = address;

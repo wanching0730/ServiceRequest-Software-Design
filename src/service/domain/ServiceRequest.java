@@ -1,5 +1,8 @@
 package service.domain;
 
+import service.DbHelper.Client;
+import service.DbHelper.Technician;
+
 public class ServiceRequest {
 
     private String id;

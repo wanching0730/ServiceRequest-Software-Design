@@ -1,5 +1,8 @@
 package service.domain;
 
+import service.DbHelper.Client;
+import service.DbHelper.Technician;
+
 import java.util.List;
 
 public interface IServiceList {

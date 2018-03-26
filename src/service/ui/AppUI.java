@@ -1,5 +1,6 @@
 package service.ui;
 
+import service.DbHelper.*;
 import service.domain.*;
 
 import java.util.List;
@@ -9,6 +10,7 @@ public class AppUI implements IUserInterface {
 
     private Scanner scanner;
     private AppController controller;
+    private PersonArrayList personArrayList;
 
     public AppUI() {
         scanner = new Scanner(System.in);
@@ -43,9 +45,15 @@ public class AppUI implements IUserInterface {
             switch (choice) {
                 case 1: displayAllRequest();
                 break;
-                case 2: createRequest();
+                case 2: {
+                    retrievePerson(new ClientArrayList(), "List of clients:");
+                    createRequest();
+                }
                 break;
-                case 3: assignTechnician();
+                case 3: {
+                    retrievePerson(new TechnicianArrayList(), "List of technicians:");
+                    assignTechnician();
+                }
                 break;
                 case 4: updateServiceCharge();
                 break;
@@ -75,7 +83,7 @@ public class AppUI implements IUserInterface {
 
     private void createRequest() {
 
-        Client selectedClient = null;
+        Person selectedClient = null;
 
         do {
             selectedClient = searchClient();
@@ -90,7 +98,7 @@ public class AppUI implements IUserInterface {
             System.out.println("Enter request ID (Eg: 3001, 3002, 3003...):  ");
             String skip2 = scanner.nextLine();
             String requestId = scanner.nextLine();
-            controller.createRequest(requestId, selectedClient);
+            controller.createRequest(requestId, (Client)selectedClient);
             System.out.println("Request created successfully!");
         } else {
             System.out.print("Thank you!");
@@ -99,7 +107,7 @@ public class AppUI implements IUserInterface {
 
     private void assignTechnician() {
 
-        Technician selectedTechnician = null;
+        Person selectedTechnician = null;
 
         searchRequest();
 
@@ -116,7 +124,7 @@ public class AppUI implements IUserInterface {
             System.out.println("Enter service date (DD/MM/YYYY): ");
             String skip3 = scanner.nextLine();
             String serviceDate = scanner.nextLine();
-            controller.assignTechnician(selectedTechnician, serviceDate);
+            controller.assignTechnician((Technician)selectedTechnician, serviceDate);
             System.out.println("Technician assigned successfully!");
         } else {
             System.out.print("Thank you!");
@@ -150,13 +158,11 @@ public class AppUI implements IUserInterface {
         } while(selectedRequest == null);
     }
 
-    private Client searchClient() {
+    private Person searchClient() {
 
-        boolean found = false;
-        int i = 0;
-        Client selectedClient = null;
         String clientId;
-        List<Client> clients = ExistingData.retrieveClients();
+        personArrayList = new ClientArrayList();
+        Person selectedClient = null;
 
         System.out.println("Enter client ID (Eg: 1001, 1002, 1003...):  ");
 
@@ -164,31 +170,20 @@ public class AppUI implements IUserInterface {
             clientId = scanner.nextLine();
         } while(clientId.isEmpty());
 
-        while(i < clients.size() && !found) {
-            selectedClient = clients.get(i);
-            if(selectedClient.getId().equals(clientId)) {
-                found = true;
-            } else {
-                i++;
-            }
-        }
+        selectedClient = personArrayList.search(clientId);
 
-        if(found) {
-            return selectedClient;
-        } else {
-            System.out.println("Client ID is not found!");
-            System.out.println("Please try again.");
-            return null;
-        }
+        if(selectedClient == null)
+            System.out.println("Client ID not found!");
+
+        return selectedClient;
+
     }
 
-    private Technician searchTechnician() {
+    private Person searchTechnician() {
 
-        boolean found = false;
-        int i = 0;
         String technicianId;
-        Technician selectedTechnician = null;
-        List<Technician> technicians = ExistingData.retrieveTechnician();
+        personArrayList = new TechnicianArrayList();
+        Person selectedTechnician = null;
 
         System.out.println("Enter technician ID (Eg: 2001, 2002, 2003...) ");
 
@@ -196,22 +191,12 @@ public class AppUI implements IUserInterface {
             technicianId = scanner.nextLine();
         } while(technicianId.isEmpty());
 
-        while(!found && i < technicians.size()) {
-            selectedTechnician = technicians.get(i);
-            if(selectedTechnician.getId().equals(technicianId)) {
-                found = true;
-            } else {
-                i++;
-            }
-        }
+        selectedTechnician = personArrayList.search(technicianId);
 
-        if(found) {
-            return selectedTechnician;
-        } else {
-            System.out.println("Technician not found!");
-            System.out.println("Please try again.");
-            return null;
-        }
+        if(selectedTechnician == null)
+            System.out.println("Technician ID not found!");
+
+        return selectedTechnician;
     }
 
     public void displayRequest(ServiceRequest selectedRequest) {
@@ -231,7 +216,7 @@ public class AppUI implements IUserInterface {
         }
     }
 
-    public void displayClient(Client selectedClient) {
+    public void displayClient(Person selectedClient) {
 
         System.out.println("Details of selected client: ");
         System.out.println("Name: " + selectedClient.getName());
@@ -240,12 +225,20 @@ public class AppUI implements IUserInterface {
         System.out.println();
     }
 
-    public void displayTechnician(Technician selectedTechnician) {
+    public void displayTechnician(Person selectedTechnician) {
         System.out.println("Details of selected technician: ");
         System.out.println("Name: " + selectedTechnician.getName());
-        System.out.println("Sex: " + selectedTechnician.getSex());
         System.out.println("Address: " + selectedTechnician.getAddress());
         System.out.println("Contact: " + selectedTechnician.getContact());
         System.out.println();
+    }
+
+    public void retrievePerson(PersonArrayList personArrayList, String message) {
+
+        System.out.println(message);
+        for(Person client : personArrayList.retrieve()) {
+            System.out.println("ID: " + client.getId());
+            System.out.println("Name: " + client.getName());
+        }
     }
 }
